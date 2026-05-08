@@ -1,5 +1,5 @@
 // src/components/ProductCard.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../CartContext";
 
 function badge(product) {
@@ -13,9 +13,22 @@ function badge(product) {
 
 export default function ProductCard({ product, onClick }) {
   const { addItem, items } = useCart();
+  const [imgIndex, setImgIndex] = useState(0);
   const inCart = items.some(i => i.productId === product.id);
   const b      = badge(product);
-  const thumb  = product.images?.[0]?.url;
+  const images = product.images || [];
+  const thumb  = images[imgIndex]?.url || images[0]?.url;
+
+  // Automatic slideshow effect
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const timer = setInterval(() => {
+      setImgIndex((prev) => (prev + 1) % images.length);
+    }, 3000 + Math.random() * 1000); // Random offset so not all cards flip at once
+
+    return () => clearInterval(timer);
+  }, [images.length]);
 
   function handleAdd(e) {
     e.stopPropagation();
@@ -23,7 +36,7 @@ export default function ProductCard({ product, onClick }) {
       productId:   product.id,
       productName: product.name,
       price:       product.price,
-      image:       thumb,
+      image:       images[0]?.url,
     });
   }
 
@@ -31,9 +44,26 @@ export default function ProductCard({ product, onClick }) {
     <article className="product-card" onClick={() => onClick(product)} role="button" tabIndex={0}
       onKeyDown={e => e.key === "Enter" && onClick(product)}>
       <div className="product-img-wrap">
-        {thumb
-          ? <img src={thumb} alt={product.name} loading="lazy" />
-          : <div style={{ width: "100%", height: "100%", background: "#e5e7eb" }} />}
+        {images.length > 0 ? (
+          <img 
+            key={imgIndex} // Key ensures transition re-triggers
+            src={thumb} 
+            alt={product.name} 
+            loading="lazy" 
+            className="product-card-img"
+          />
+        ) : (
+          <div style={{ width: "100%", height: "100%", background: "#e5e7eb" }} />
+        )}
+        
+        {images.length > 1 && (
+          <div className="img-indicator">
+            {images.map((_, i) => (
+              <span key={i} className={`mini-dot ${i === imgIndex ? 'active' : ''}`} />
+            ))}
+          </div>
+        )}
+
         {b && <span className={`product-badge ${b.cls}`}>{b.label}</span>}
         {product.stock === 0 && (
           <div className="out-of-stock-overlay">Out of stock</div>
@@ -59,3 +89,4 @@ export default function ProductCard({ product, onClick }) {
     </article>
   );
 }
+

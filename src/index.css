@@ -63,23 +63,172 @@ a      { color: inherit; text-decoration: none; }
 .categories {
   background: var(--card-bg);
   border-bottom: 1px solid var(--border);
-  padding: 10px 0;
+  padding: 16px 0;
 }
 .categories-scroll {
-  display: flex; gap: 8px; padding: 0 14px;
+  display: flex; gap: 16px; padding: 0 20px;
   overflow-x: auto; scrollbar-width: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 .categories-scroll::-webkit-scrollbar { display: none; }
 .cat-pill {
-  flex-shrink: 0; padding: 6px 16px; border-radius: 20px;
-  font-size: 13px; font-weight: 500; border: 1.5px solid var(--border);
-  background: transparent; color: var(--text-muted); transition: all .15s;
+  flex-shrink: 0; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 8px;
+  background: transparent; 
+  color: var(--text-muted); 
+  transition: all .2s;
+  min-width: 80px;
+}
+.cat-thumb, .cat-thumb-placeholder {
+  width: 72px; 
+  height: 72px; 
+  border-radius: 50%; 
+  object-fit: cover;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+.cat-thumb-placeholder {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.cat-pill span {
+  font-size: 11px;
+  font-weight: 800;
   white-space: nowrap;
+  color: #d32f2f;
+  text-transform: uppercase;
 }
-.cat-pill.active {
-  background: var(--green-dark); color: #fff; border-color: var(--green-dark);
+.cat-pill.active .cat-thumb, .cat-pill.active .cat-thumb-placeholder {
+  border-color: #d32f2f;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
+  background: #fff;
+  transform: scale(1.1);
 }
-.cat-pill:hover:not(.active) { border-color: var(--green-dark); color: var(--green-dark); }
+.cat-pill.focused .cat-thumb, .cat-pill.focused .cat-thumb-placeholder {
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  transform: scale(1.15);
+  animation: pulse-gold 2s infinite;
+}
+
+@keyframes pulse-gold {
+  0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+.cat-pill.active span {
+  color: #b71c1c;
+}
+
+
+/* ── Header Title & Glitter ────────────────────────────────── */
+.header-title {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.glitter-text {
+  background: linear-gradient(
+    to right,
+    #fff 20%,
+    #ffd700 40%,
+    #fff 60%,
+    #ffd700 80%
+  );
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+
+@keyframes shine {
+  to { background-position: 200% center; }
+}
+
+/* ── Logo & Branding ────────────────────────────────────────── */
+
+.circle-logo {
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  color: #d32f2f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 2.5px solid #d32f2f;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+.circle-logo.dark {
+  background: #d32f2f;
+  color: #fff;
+  border-color: #fff;
+}
+
+
+.cat-pill:hover .cat-thumb {
+  border-color: #d32f2f;
+  transform: translateY(-2px);
+}
+
+.cat-pill:active .cat-thumb {
+  transform: scale(0.95);
+}
+
+/* ── Product detail carousel ─────────────────────────────────── */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.1;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+.carousel-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 100%;
+}
+.carousel-scroll::-webkit-scrollbar { display: none; }
+.carousel-item {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: center;
+}
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 
 /* ── Product grid ───────────────────────────────────────────── */
 .products { padding: 14px; }
@@ -94,7 +243,36 @@ a      { color: inherit; text-decoration: none; }
 }
 .product-card:active { transform: scale(.98); }
 .product-img-wrap { position: relative; aspect-ratio: 1; background: #f0f0f0; overflow: hidden; }
-.product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: opacity .2s; }
+.product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: opacity .5s ease-in-out; }
+.product-card-img { animation: fadeIn 0.5s ease-in-out; }
+
+.img-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 5;
+  background: rgba(0,0,0,0.2);
+  padding: 3px 6px;
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+}
+.mini-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  transition: all 0.2s;
+}
+.mini-dot.active {
+  background: #fff;
+  transform: scale(1.2);
+  width: 8px;
+  border-radius: 2px;
+}
+
 .product-badge {
   position: absolute; top: 6px; left: 6px;
   background: var(--green); color: #fff;
@@ -270,7 +448,229 @@ a      { color: inherit; text-decoration: none; }
 .detail-meta  { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
 .detail-meta span { margin-right: 12px; }
 
+/* ── Carousel & Navigation ──────────────────────────────────── */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.2;
+  background: #f0f0f0;
+}
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  z-index: 10;
+}
+.carousel-nav:hover { background: #fff; transform: translateY(-50%) scale(1.1); }
+.carousel-nav.prev { left: 12px; }
+.carousel-nav.next { right: 12px; }
+
+.carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s;
+}
+.dot.active {
+  background: #fff;
+  transform: scale(1.3);
+  width: 12px;
+  border-radius: 4px;
+}
+
+.thumbnail-strip {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.thumbnail-strip::-webkit-scrollbar { display: none; }
+.thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.thumb.active { border-color: var(--green); }
+
+.detail-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Hamburger Menu ────────────────────────────────────────── */
+.header-left { display: flex; align-items: center; gap: 8px; }
+.menu-btn {
+  background: transparent;
+  color: white;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  animation: fadeIn 0.2s;
+}
+.menu-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100%;
+  background: var(--card-bg);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  animation: slideInLeft 0.3s ease-out;
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.menu-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu-logo { font-size: 28px; }
+.menu-close {
+  background: transparent;
+  font-size: 32px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.menu-nav {
+  flex: 1;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+.menu-link {
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.menu-link:hover { background: var(--bg); color: var(--green-mid); }
+.menu-link.active { color: var(--green-mid); background: rgba(37, 211, 102, 0.1); border-left: 4px solid var(--green); }
+
+.menu-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.menu-footer p { margin-bottom: 4px; }
+
+/* ── WhatsApp Floating Button ──────────────────────────────── */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  height: 54px;
+  padding: 0 20px;
+  background-color: #25d366;
+  color: #fff;
+  border-radius: 27px;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  animation: pulsate-glow 2s infinite;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.whatsapp-float svg {
+  flex-shrink: 0;
+}
+
+.whatsapp-float span {
+  white-space: nowrap;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.05) translateY(-5px);
+  background-color: #128c7e;
+}
+
+
+@keyframes pulsate-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+@media (max-width: 480px) {
+  .whatsapp-float {
+    bottom: 20px;
+    right: 20px;
+    width: 54px;
+    height: 54px;
+  }
+}
+
 /* ── Toast ─────────────────────────────────────────────────── */
+
+
 .toast {
   position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
   background: #1a1a1a; color: white; padding: 10px 20px;
