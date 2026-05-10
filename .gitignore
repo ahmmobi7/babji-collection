@@ -1,0 +1,26 @@
+# Secret keys — NEVER commit these
+.env
+.env.example
+
+# Generated output files
+output/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+.env/
+
+# Mac junk
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+/node_modules
