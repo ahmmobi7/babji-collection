@@ -12,17 +12,20 @@ export default function CategoryFilter({ categories, active, focused, onSelect, 
                    container.querySelector(".cat-pill.active");
     
     if (target) {
-      const targetLeft = target.offsetLeft;
-      const targetWidth = target.offsetWidth;
-      const containerWidth = container.offsetWidth;
-      
-      // Center the target in the container
-      const scrollPos = targetLeft - (containerWidth / 2) + (targetWidth / 2);
-      
-      container.scrollTo({
-        left: scrollPos,
-        behavior: "smooth"
-      });
+      const rect = container.getBoundingClientRect();
+      // Only scroll horizontally if the category bar is actually visible to the user.
+      // This prevents browsers from "helpfully" scrolling the window vertically to 
+      // bring the category bar into view when the automatic focus rotation triggers.
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        const targetLeft = target.offsetLeft;
+        const targetWidth = target.offsetWidth;
+        const containerWidth = container.offsetWidth;
+        const scrollPos = targetLeft - (containerWidth / 2) + (targetWidth / 2);
+
+        container.scrollLeft = scrollPos;
+      }
     }
   }, [focused, active]);
 
