@@ -4,7 +4,6 @@ import React, { useEffect, useRef } from "react";
 export default function CategoryFilter({ categories, active, focused, onSelect, allImage }) {
   const scrollRef = useRef(null);
 
-
   // Auto-scroll focused/active category into view (horizontal only)
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -24,15 +23,6 @@ export default function CategoryFilter({ categories, active, focused, onSelect, 
         left: scrollPos,
         behavior: "smooth"
       });
-
-  // Auto-scroll focused/active category into view
-  useEffect(() => {
-    if (!scrollRef.current) return;
-    // Prioritize scrolling to the focused item if it exists
-    const target = scrollRef.current.querySelector(".cat-pill.focused") || 
-                   scrollRef.current.querySelector(".cat-pill.active");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }
   }, [focused, active]);
 
